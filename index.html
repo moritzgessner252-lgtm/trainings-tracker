@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Training Tracker</title>
     
     <!-- Web App Meta Tags -->
@@ -18,6 +18,32 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Mobile Optimierungen - Verhindert Zoomen */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        body {
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: 100%;
+            touch-action: pan-y;
+        }
+        input, textarea, button {
+            font-size: 18px !important;
+            min-height: 48px;
+        }
+        table input {
+            font-size: 16px !important;
+            min-height: 44px;
+        }
+        /* Verhindert Zoom beim Fokussieren von Inputs */
+        input:focus, textarea:focus, select:focus {
+            font-size: 18px !important;
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
@@ -645,9 +671,9 @@
 
                             {/* Gym Form */}
                             {selectedSport === 'gym' && (
-                                <div className="bg-purple-50 rounded-lg p-6 mb-6">
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">💪 Gym Übungen</h3>
-                                    <p className="text-sm text-gray-600 mb-4">Trage für jeden Satz die Wiederholungen ein (maximal 5 Sätze pro Übung)</p>
+                                <div className="bg-purple-50 rounded-lg p-4 mb-6">
+                                    <h3 className="text-2xl font-semibold text-gray-800 mb-4">💪 Gym Übungen</h3>
+                                    <p className="text-lg text-gray-600 mb-2">Trage deine Übungen ein (maximal 5 Sätze pro Übung)</p>
                                     {(() => {
                                         const allDates = Object.keys(savedTrainings).sort().reverse();
                                         const lastGymDate = allDates.find(date => 
@@ -657,99 +683,110 @@
                                         if (lastGymDate && !savedTrainings[currentDate]) {
                                             return (
                                                 <div className="bg-blue-100 border border-blue-300 rounded-lg p-3 mb-4">
-                                                    <p className="text-sm text-blue-800">
+                                                    <p className="text-base text-blue-800">
                                                         💡 <strong>Tipp:</strong> Daten vom {new Date(lastGymDate).toLocaleDateString('de-DE')} wurden geladen. Du kannst sie anpassen!
                                                     </p>
                                                 </div>
                                             );
                                         }
                                     })()}
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full">
-                                            <thead>
-                                                <tr className="bg-purple-100">
-                                                    <th className="px-2 py-2 text-left text-sm font-semibold text-gray-700">Nr.</th>
-                                                    <th className="px-2 py-2 text-left text-sm font-semibold text-gray-700">Übung</th>
-                                                    <th className="px-2 py-2 text-left text-sm font-semibold text-gray-700">Gewicht (kg)</th>
-                                                    <th className="px-2 py-2 text-left text-sm font-semibold text-gray-700">Satz 1</th>
-                                                    <th className="px-2 py-2 text-left text-sm font-semibold text-gray-700">Satz 2</th>
-                                                    <th className="px-2 py-2 text-left text-sm font-semibold text-gray-700">Satz 3</th>
-                                                    <th className="px-2 py-2 text-left text-sm font-semibold text-gray-700">Satz 4</th>
-                                                    <th className="px-2 py-2 text-left text-sm font-semibold text-gray-700">Satz 5</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {gymData.map((row, index) => (
-                                                    <tr key={index} className="border-b border-purple-100">
-                                                        <td className="px-2 py-2 text-sm text-gray-600">{index + 1}</td>
-                                                        <td className="px-2 py-2">
-                                                            <input
-                                                                type="text"
-                                                                value={row.exercise}
-                                                                onChange={(e) => handleGymChange(index, 'exercise', e.target.value)}
-                                                                placeholder="z.B. Bankdrücken"
-                                                                className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 text-sm"
-                                                            />
-                                                        </td>
-                                                        <td className="px-2 py-2">
+                                    
+                                    <div className="space-y-6">
+                                        {gymData.map((row, index) => (
+                                            <div key={index} className="bg-white rounded-xl p-5 shadow-md border-2 border-purple-200">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <span className="text-2xl font-bold text-purple-600">#{index + 1}</span>
+                                                </div>
+                                                
+                                                {/* Übungsname */}
+                                                <div className="mb-4">
+                                                    <label className="block text-lg font-semibold text-gray-700 mb-2">Übung</label>
+                                                    <input
+                                                        type="text"
+                                                        value={row.exercise}
+                                                        onChange={(e) => handleGymChange(index, 'exercise', e.target.value)}
+                                                        placeholder="z.B. Bankdrücken"
+                                                        className="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                                    />
+                                                </div>
+                                                
+                                                {/* Gewicht */}
+                                                <div className="mb-4">
+                                                    <label className="block text-lg font-semibold text-gray-700 mb-2">Gewicht (kg)</label>
+                                                    <input
+                                                        type="number"
+                                                        step="0.5"
+                                                        inputMode="decimal"
+                                                        value={row.weight}
+                                                        onChange={(e) => handleGymChange(index, 'weight', e.target.value)}
+                                                        placeholder="z.B. 80"
+                                                        className="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                                    />
+                                                </div>
+                                                
+                                                {/* Sätze */}
+                                                <div className="mb-2">
+                                                    <label className="block text-lg font-semibold text-gray-700 mb-3">Wiederholungen pro Satz</label>
+                                                    <div className="grid grid-cols-5 gap-2">
+                                                        <div>
+                                                            <label className="block text-sm text-gray-600 mb-1 text-center">1</label>
                                                             <input
                                                                 type="number"
-                                                                step="0.5"
-                                                                value={row.weight}
-                                                                onChange={(e) => handleGymChange(index, 'weight', e.target.value)}
-                                                                placeholder="kg"
-                                                                className="w-20 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 text-sm"
-                                                            />
-                                                        </td>
-                                                        <td className="px-2 py-2">
-                                                            <input
-                                                                type="number"
+                                                                inputMode="numeric"
                                                                 value={row.set1}
                                                                 onChange={(e) => handleGymChange(index, 'set1', e.target.value)}
-                                                                placeholder="Wdh."
-                                                                className="w-16 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 text-sm"
+                                                                placeholder="12"
+                                                                className="w-full px-2 py-3 text-lg text-center border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                                             />
-                                                        </td>
-                                                        <td className="px-2 py-2">
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-sm text-gray-600 mb-1 text-center">2</label>
                                                             <input
                                                                 type="number"
+                                                                inputMode="numeric"
                                                                 value={row.set2}
                                                                 onChange={(e) => handleGymChange(index, 'set2', e.target.value)}
-                                                                placeholder="Wdh."
-                                                                className="w-16 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 text-sm"
+                                                                placeholder="10"
+                                                                className="w-full px-2 py-3 text-lg text-center border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                                             />
-                                                        </td>
-                                                        <td className="px-2 py-2">
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-sm text-gray-600 mb-1 text-center">3</label>
                                                             <input
                                                                 type="number"
+                                                                inputMode="numeric"
                                                                 value={row.set3}
                                                                 onChange={(e) => handleGymChange(index, 'set3', e.target.value)}
-                                                                placeholder="Wdh."
-                                                                className="w-16 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 text-sm"
+                                                                placeholder="8"
+                                                                className="w-full px-2 py-3 text-lg text-center border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                                             />
-                                                        </td>
-                                                        <td className="px-2 py-2">
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-sm text-gray-600 mb-1 text-center">4</label>
                                                             <input
                                                                 type="number"
+                                                                inputMode="numeric"
                                                                 value={row.set4}
                                                                 onChange={(e) => handleGymChange(index, 'set4', e.target.value)}
-                                                                placeholder="Wdh."
-                                                                className="w-16 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 text-sm"
+                                                                placeholder="6"
+                                                                className="w-full px-2 py-3 text-lg text-center border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                                             />
-                                                        </td>
-                                                        <td className="px-2 py-2">
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-sm text-gray-600 mb-1 text-center">5</label>
                                                             <input
                                                                 type="number"
+                                                                inputMode="numeric"
                                                                 value={row.set5}
                                                                 onChange={(e) => handleGymChange(index, 'set5', e.target.value)}
-                                                                placeholder="Wdh."
-                                                                className="w-16 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 text-sm"
+                                                                placeholder="4"
+                                                                className="w-full px-2 py-3 text-lg text-center border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                                             />
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )}
