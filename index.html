@@ -143,6 +143,21 @@
                         } else if (sport === 'anderes' && saved.data) {
                             setAnderesData(saved.data);
                         }
+                        return; // Already loaded data for this date
+                    }
+                }
+                
+                // For gym: Load the most recent gym training as a template
+                if (sport === 'gym') {
+                    const allDates = Object.keys(savedTrainings).sort().reverse();
+                    const lastGymDate = allDates.find(date => 
+                        savedTrainings[date].sport === 'gym' && 
+                        savedTrainings[date].data
+                    );
+                    
+                    if (lastGymDate) {
+                        // Load the last gym training data as template
+                        setGymData(savedTrainings[lastGymDate].data);
                     }
                 }
             };
@@ -652,7 +667,21 @@
                             {selectedSport === 'gym' && (
                                 <div className="bg-purple-50 rounded-lg p-4 mb-6">
                                     <h3 className="text-2xl font-semibold text-gray-800 mb-4">💪 Gym Übungen</h3>
-                                    <p className="text-lg text-gray-600 mb-6">Trage deine Übungen ein (maximal 5 Sätze pro Übung)</p>
+                                    <p className="text-lg text-gray-600 mb-2">Trage deine Übungen ein (maximal 5 Sätze pro Übung)</p>
+                                    {(() => {
+                                        const allDates = Object.keys(savedTrainings).sort().reverse();
+                                        const lastGymDate = allDates.find(date => 
+                                            savedTrainings[date].sport === 'gym' && 
+                                            date !== currentDate
+                                        );
+                                        if (lastGymDate) {
+                                            return (
+                                                <p className="text-base text-blue-600 mb-6 bg-blue-100 p-3 rounded-lg">
+                                                    💡 Daten vom letzten Training ({new Date(lastGymDate).toLocaleDateString('de-DE')}) wurden geladen. Du kannst sie anpassen!
+                                                </p>
+                                            );
+                                        }
+                                    })()}
                                     
                                     <div className="space-y-6">
                                         {gymData.map((row, index) => (
