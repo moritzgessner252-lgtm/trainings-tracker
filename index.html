@@ -75,43 +75,45 @@
 
             const loadData = async () => {
                 try {
-                    const result = await window.storage.get('training-data');
-                    if (result && result.value) {
-                        setSavedTrainings(JSON.parse(result.value));
+                    const data = localStorage.getItem('training-data');
+                    if (data) {
+                        setSavedTrainings(JSON.parse(data));
                     }
                 } catch (error) {
-                    console.log('Keine gespeicherten Daten gefunden');
+                    console.log('Keine gespeicherten Daten gefunden:', error);
                 }
             };
 
             const saveData = async (data) => {
                 try {
-                    await window.storage.set('training-data', JSON.stringify(data));
+                    localStorage.setItem('training-data', JSON.stringify(data));
                 } catch (error) {
                     console.error('Fehler beim Speichern:', error);
+                    alert('Fehler beim Speichern der Daten!');
                 }
             };
 
             const archiveOldData = async () => {
                 try {
-                    const result = await window.storage.get('training-data');
-                    if (!result || !result.value) return;
+                    const data = localStorage.getItem('training-data');
+                    if (!data) return;
 
-                    const data = JSON.parse(result.value);
+                    const parsedData = JSON.parse(data);
+                    const parsedData = JSON.parse(data);
                     const today = new Date();
                     const oneYearAgo = new Date(today.getTime() - 365 * 24 * 60 * 60 * 1000);
                     
                     // Filter out data older than one year
                     const filteredData = {};
-                    Object.keys(data).forEach(date => {
+                    Object.keys(parsedData).forEach(date => {
                         const entryDate = new Date(date);
                         if (entryDate > oneYearAgo) {
-                            filteredData[date] = data[date];
+                            filteredData[date] = parsedData[date];
                         }
                     });
 
-                    if (Object.keys(filteredData).length !== Object.keys(data).length) {
-                        await window.storage.set('training-data', JSON.stringify(filteredData));
+                    if (Object.keys(filteredData).length !== Object.keys(parsedData).length) {
+                        localStorage.setItem('training-data', JSON.stringify(filteredData));
                         setSavedTrainings(filteredData);
                     }
                 } catch (error) {
