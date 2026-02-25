@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Training Tracker</title>
     
     <!-- Web App Meta Tags -->
@@ -18,6 +18,26 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Mobile Optimierungen */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        body {
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+        }
+        input, textarea, button {
+            font-size: 18px !important;
+            min-height: 48px;
+        }
+        table input {
+            font-size: 16px !important;
+            min-height: 44px;
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
@@ -398,35 +418,36 @@
             }
             if (currentView === 'home') {
                 return (
-                    <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-pink-100 to-purple-200 p-4 flex items-center justify-center">
-                        <div className="max-w-md w-full">
-                            <div className="text-center mb-12">
-                                <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 bg-clip-text text-transparent">
-                                    🏋️ Training Tracker
+                    <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-pink-100 to-purple-200 p-6 flex items-center justify-center">
+                        <div className="w-full px-2">
+                            <div className="text-center mb-16">
+                                <div className="text-8xl mb-6">🏋️</div>
+                                <h1 className="text-5xl font-bold mb-4 text-gray-800">
+                                    Training Tracker
                                 </h1>
-                                <p className="text-2xl text-gray-700 font-medium">Wähle eine Option</p>
+                                <p className="text-3xl text-gray-700 font-medium">Wähle eine Option</p>
                             </div>
 
-                            <div className="space-y-6 mb-8">
+                            <div className="space-y-8 mb-12">
                                 <button
                                     onClick={() => setCurrentView('training')}
-                                    className="w-full bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white text-3xl font-bold py-8 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-4"
+                                    className="w-full bg-gradient-to-r from-green-400 to-blue-500 active:from-green-600 active:to-blue-700 text-white text-4xl font-bold py-16 rounded-3xl shadow-2xl transform active:scale-95 transition-all duration-150 flex flex-col items-center justify-center gap-4"
                                 >
-                                    <span className="text-5xl">💪</span>
+                                    <span className="text-7xl">💪</span>
                                     <span>Training</span>
                                 </button>
 
                                 <button
                                     onClick={() => setCurrentView('archive')}
-                                    className="w-full bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 text-white text-3xl font-bold py-8 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-4"
+                                    className="w-full bg-gradient-to-r from-purple-400 to-pink-500 active:from-purple-600 active:to-pink-700 text-white text-4xl font-bold py-16 rounded-3xl shadow-2xl transform active:scale-95 transition-all duration-150 flex flex-col items-center justify-center gap-4"
                                 >
-                                    <span className="text-5xl">📊</span>
+                                    <span className="text-7xl">📊</span>
                                     <span>Archiv</span>
                                 </button>
                             </div>
 
                             <div className="text-center">
-                                <p className="text-xl text-gray-600 font-semibold">
+                                <p className="text-2xl text-gray-600 font-semibold">
                                     Trainings Tracker by Moritz
                                 </p>
                             </div>
