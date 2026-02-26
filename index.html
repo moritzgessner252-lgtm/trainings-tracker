@@ -153,10 +153,13 @@
                     const saved = savedTrainings[currentDate];
                     if (saved.sport === sport) {
                         if (sport === 'laufen' && saved.data) {
-                            setRunningData(saved.data);
+                            // Deep copy to prevent modifying original data
+                            setRunningData(JSON.parse(JSON.stringify(saved.data)));
                         } else if (sport === 'gym' && saved.data) {
-                            setGymData(saved.data);
+                            // Deep copy to prevent modifying original data
+                            setGymData(JSON.parse(JSON.stringify(saved.data)));
                         } else if (sport === 'anderes' && saved.data) {
+                            // Simple copy for string data
                             setAnderesData(saved.data);
                         }
                         return; // Data already loaded for this date
@@ -171,7 +174,8 @@
                             if (date !== currentDate && 
                                 savedTrainings[date].sport === 'gym' && 
                                 savedTrainings[date].data) {
-                                setGymData(savedTrainings[date].data);
+                                // Deep copy to prevent modifying original data
+                                setGymData(JSON.parse(JSON.stringify(savedTrainings[date].data)));
                                 break; // Use the most recent gym training
                             }
                         }
